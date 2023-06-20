@@ -1,0 +1,86 @@
+{% extends 'itis_app/base.html'%}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            {% if messages or form.errors %}
+                <div class="alert
+                    {% if messages %} {% if message.tags == info %}
+                    alert-warning {% else %} alert-success {% endif %}
+                    {% else %} alert-warning {% endif %}
+                    alert-dismissible fade show" role="alert" style="margin-top: 50px;">
+                    {% if messages %}
+                        {% for message in messages%}
+                            {{ message }}
+                        {% endfor %}
+                    {% else %}
+                        {{ form.non_field_errors }}
+                    {% endif %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-7" style="margin-top: 50px; margin-left: 25px">
+                    <h1 class="mt-6">Выявление сердечно-сосудистых заболеваний</h1>
+                    <p>Сердечно-сосудистые заболевания (ССЗ) остаются основной причиной преждевременной смерти во всем мире. По данным эпидемиологических исследований, профилактика ССЗ высоко эффективна. Снижение смертности от ИБС на 50% связано с воздействием на факторы риска и только на 40% с улучшением лечения.
+Данный сайт предназначен для выявления подверженности организма ССЗ. По таким признакам как возраст, креатинфосфокиназа, выброс фракции, тромбоциты и время будет выявлена группа риска пациента.</p>
+                </div>
+                <div class="col-lg-6" style="margin-top: 25px; margin-left: 25px">
+                    <form action="{% url 'itis_app:index' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.age }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.creatinine_phosphokinase }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.ejection_fraction }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.platelets }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form.time }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-lg-12" style="margin-top: 20px;">
+                                <input class="btn btn-info btn-block" type="submit" value="Получить ответ">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-5" >
+                {% if result %}
+                    <div class="alert alert-danger" role="alert" style="margin-top: 25px; margin-left: 25px">
+                        <h4 class="alert-heading" align="center">Вы в зоне риска!</h4>
+                    </div>
+                {% endif%}
+            </div>
+        </div>
+    </section>
+{% endblock %}
